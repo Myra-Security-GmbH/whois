@@ -1,7 +1,6 @@
 package query
 
 import (
-	"fmt"
 	"net"
 	"testing"
 
@@ -134,13 +133,51 @@ func TestIP3(t *testing.T) {
 
 	require.Nil(t, err)
 	require.NotEmpty(t, data)
+	require.Equal(t, 10, len(data))
 
-	fmt.Printf("%+v\n", data)
+	require.Equal(t, "23.0.0.0 - 23.15.255.255", data[0]["NetRange"])
+	require.Equal(t, "23.0.0.0/12", data[0]["CIDR"])
+	require.Equal(t, "AKAMAI", data[0]["NetName"])
+	require.Equal(t, "NET-23-0-0-0-1", data[0]["NetHandle"])
+	require.Equal(t, "NET23 (NET-23-0-0-0-0)", data[0]["Parent"])
+	require.Equal(t, "Direct Allocation", data[0]["NetType"])
+	require.Equal(t, "", data[0]["OriginAS"])
+	require.Equal(t, "Akamai Technologies, Inc. (AKAMAI)", data[0]["Organization"])
+	require.Equal(t, "2010-12-17", data[0]["RegDate"])
+	require.Equal(t, "2012-03-02", data[0]["Updated"])
+	require.Equal(t, "https://whois.arin.net/rest/net/NET-23-0-0-0-1", data[0]["Ref"])
 
-	require.Equal(t, 2, len(data))
+	require.Equal(t, "Akamai Technologies, Inc.", data[1]["OrgName"])
+	require.Equal(t, "AKAMAI", data[1]["OrgId"])
+	require.Equal(t, "150 Broadway", data[1]["Address"])
+	require.Equal(t, "Cambridge", data[1]["City"])
+	require.Equal(t, "MA", data[1]["StateProv"])
+	require.Equal(t, "02142", data[1]["PostalCode"])
+	require.Equal(t, "US", data[1]["Country"])
+	require.Equal(t, "1999-01-21", data[1]["RegDate"])
+	require.Equal(t, "2017-03-07", data[1]["Updated"])
+	require.Equal(t, "https://whois.arin.net/rest/org/AKAMAI", data[1]["Ref"])
 
-}
+	require.Equal(t, "23.8.0.0 - 23.8.15.255", data[6]["NetRange"])
+	require.Equal(t, "23.8.0.0/20", data[6]["CIDR"])
+	require.Equal(t, "AIBV", data[6]["NetName"])
+	require.Equal(t, "NET-23-8-0-0-1", data[6]["NetHandle"])
+	require.Equal(t, "AKAMAI (NET-23-0-0-0-1)", data[6]["Parent"])
+	require.Equal(t, "Reassigned", data[6]["NetType"])
+	require.Equal(t, "", data[6]["OriginAS"])
+	require.Equal(t, "Akamai International, BV (AIB-17)", data[6]["Organization"])
+	require.Equal(t, "2015-06-22", data[6]["RegDate"])
+	require.Equal(t, "2015-06-22", data[6]["Updated"])
+	require.Equal(t, "https://whois.arin.net/rest/net/NET-23-8-0-0-1", data[6]["Ref"])
 
-func TestIP4(t *testing.T) {
-
+	require.Equal(t, "Akamai International, BV", data[7]["OrgName"])
+	require.Equal(t, "AIB-17", data[7]["OrgId"])
+	require.Equal(t, "Prins Bernhardplein 200", data[7]["Address"])
+	require.Equal(t, "Amsterdam", data[7]["City"])
+	require.Equal(t, "", data[7]["StateProv"])
+	require.Equal(t, "1097 JB", data[7]["PostalCode"])
+	require.Equal(t, "NL", data[7]["Country"])
+	require.Equal(t, "2013-09-19", data[7]["RegDate"])
+	require.Equal(t, "2016-12-14", data[7]["Updated"])
+	require.Equal(t, "https://whois.arin.net/rest/org/AIB-17", data[7]["Ref"])
 }

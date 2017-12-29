@@ -13,6 +13,13 @@ func query(server string, data string) ([]byte, error) {
 		return nil, err
 	}
 
+	switch server {
+	case ArinServer:
+		data = "n + " + data
+	case "whois.denic.de:43":
+		data = "-T dn,ace " + data
+	}
+
 	n, err := conn.Write([]byte(data + "\r\n"))
 
 	if err != nil {

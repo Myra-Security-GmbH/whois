@@ -5,9 +5,9 @@ import (
 )
 
 //
-// parseArinFormat parses whois output format of Arin.
+// parseICANNData parses whois output format of Internic.
 //
-func parseArinFormat(in []byte) []map[string]string {
+func parseICANNData(in []byte) []map[string]string {
 	ret := []map[string]string{}
 	lastKey := ""
 	lastToken := []byte{}
@@ -16,37 +16,12 @@ func parseArinFormat(in []byte) []map[string]string {
 
 	currentRecord := make(map[string]string)
 
+loop:
 	for i := 0; i < len(in); i++ {
 		tok := in[i]
 
 		switch {
-		case (tok == '#' && (i == 0 || (i > 0 && in[i-1] == '\n'))):
-			for ; ; i++ {
-				if in[i] == '\n' {
-					break
-				}
-			}
-
-			continue
-
-		case (tok == '\n' && (i > 0 && in[i-1] == '\n')):
-			// save old record and create a new one
-			if len(currentRecord) > 0 {
-				ret = append(ret, currentRecord)
-				currentRecord = make(map[string]string)
-			}
-			continue
-
-		case (tok == '\n' && len(in) > i+1 && in[i+1] == ' '):
-			i++
-
-			for ; in[i] == ' '; i++ {
-				// loop until next character found
-			}
-			i -= 2 // want to keep a space
-			continue
-
-		case (tok == '\n' && len(in) > i+1 && in[i+1] != ' '):
+		case (tok == '\n'):
 			key := strings.Trim(string(lastToken), " ")
 			value := strings.Trim(string(currentToken), " ")
 
@@ -70,6 +45,9 @@ func parseArinFormat(in []byte) []map[string]string {
 			lastToken = currentToken
 			currentToken = []byte{}
 			continue
+
+		case (tok == '>' && len(in) > i+2 && in[i+1] == '>' && in[i+2] == '>'):
+			break loop
 
 		default:
 			currentToken = append(currentToken, tok)

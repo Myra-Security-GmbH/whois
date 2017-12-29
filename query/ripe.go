@@ -37,7 +37,7 @@ func parseRipeFormat(in []byte) []map[string]string {
 			}
 			continue
 
-		case (tok == '\n' && in[i+1] == ' '):
+		case (tok == '\n' && len(in) > i+1 && in[i+1] == ' '):
 			i++
 
 			for ; in[i] == ' '; i++ {
@@ -46,7 +46,7 @@ func parseRipeFormat(in []byte) []map[string]string {
 			i -= 2 // want to keep a space
 			continue
 
-		case (tok == '\n' && in[i+1] != ' '):
+		case (tok == '\n' && len(in) > i+1 && in[i+1] != ' '):
 			key := strings.Trim(string(lastToken), " ")
 			value := strings.Trim(string(currentToken), " ")
 
@@ -74,6 +74,11 @@ func parseRipeFormat(in []byte) []map[string]string {
 		default:
 			currentToken = append(currentToken, tok)
 		}
+	}
+
+	if len(currentRecord) > 0 {
+		ret = append(ret, currentRecord)
+		currentRecord = make(map[string]string)
 	}
 
 	return ret

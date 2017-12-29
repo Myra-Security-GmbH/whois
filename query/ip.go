@@ -24,6 +24,12 @@ func IP(ip net.IP) ([]map[string]string, error) {
 	case ApnicServer:
 		return parseRipeFormat(data), nil
 
+	case AfrinicServer:
+		return parseRipeFormat(data), nil
+
+	case LacnicServer:
+		return parseRipeFormat(data), nil
+
 	case ArinServer:
 		return parseArinFormat(data), nil
 	}
