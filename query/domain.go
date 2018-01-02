@@ -1,31 +1,50 @@
 package query
 
 import (
-	"fmt"
 	"strings"
 )
 
 //
 // Domain performs a whois query for the given domain.
 //
-func Domain(domain string) {
-	//var parsedData []map[string]string
+func Domain(domainOrHost string) ([]map[string]string, error) {
+	domain, tld := domainTld(domainOrHost)
 
-	domainParts := strings.Split(domain, ".")
-
-	// simple tld detection
-	// ignore de.vu etc domains
-	tld := domainParts[len(domainParts)-1]
-
-	whoisServer := "whois.iana.org:43"
+	whoisServer := IanaServer
 	parsedData, _, err := findWhois(whoisServer, tld, domain)
-	if err != nil {
-		fmt.Println(err)
-	}
 
-	fmt.Printf("%+v\n\n", parsedData)
+	return parsedData, err
 }
 
+//
+// domainTld returns the domain and tld from the given domain.
+// it removes all hosts related parts from the fqdn.
+//
+func domainTld(domain string) (string, string) {
+	domainParts := strings.Split(domain, ".")
+
+	for i := 1; i < len(domainParts)-2; i++ {
+		eTld := strings.Join(domainParts[i:], ".")
+
+		tld, ok := tldlist[eTld]
+
+		if ok && tld {
+			return strings.Join(domainParts[i-1:], "."), eTld
+		}
+	}
+
+	// in theory this should no happen but use the simple
+	// way to have at least a fallback
+	return strings.Join(domainParts[len(domainParts)-2:], "."), domainParts[len(domainParts)-1]
+}
+
+//
+// findWhois loops ofer whois servers and tries to find the server responsible for the the domain.
+//
+// -> start @whois.iana.org via tld
+// -> fetch data from whois tld server
+// -> loop as long a registrant whois server is set in the records
+//
 func findWhois(server string, queryData string, domain string) (parsedData []map[string]string, whoisServer string, err error) {
 	data, err := query(server, queryData)
 	if err != nil {
@@ -35,7 +54,7 @@ func findWhois(server string, queryData string, domain string) (parsedData []map
 	switch server {
 	case "whois.denic.de:43":
 		parsedData = parseDenicFormat(data)
-	case "whois.iana.org:43":
+	case IanaServer:
 		parsedData = parseRipeFormat(data)
 	default:
 		parsedData = parseICANNData(data)

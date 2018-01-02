@@ -1,9 +1,5 @@
 package query
 
-import (
-	"strings"
-)
-
 //
 // parseArinFormat parses whois output format of Arin.
 //
@@ -47,8 +43,8 @@ func parseArinFormat(in []byte) []map[string]string {
 			continue
 
 		case (tok == '\n' && len(in) > i+1 && in[i+1] != ' '):
-			key := strings.Trim(string(lastToken), " ")
-			value := strings.Trim(string(currentToken), " ")
+			key := normalizeKey(string(lastToken))
+			value := normalizeValue(string(currentToken))
 
 			if key != "" && value != "" {
 				if lastKey == key {

@@ -22,8 +22,8 @@ loop:
 
 		switch {
 		case (tok == '\n'):
-			key := strings.Trim(string(lastToken), " \r")
-			value := strings.Trim(string(currentToken), " \r")
+			key := normalizeKey(string(lastToken))
+			value := normalizeValue(string(currentToken))
 
 			if strings.Index(key, "Registry ") == 0 && len(currentRecord) > 0 && len(value) == 0 {
 				ret = append(ret, currentRecord)

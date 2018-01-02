@@ -1,6 +1,19 @@
-hash: 9a27c5830223b6feeafd5dc3e6a046d564052979582eeda1f0d0a8cd9857e91b
-updated: 2017-12-27T06:52:24.75138615+01:00
+hash: ed5dbb206108376986287fa76dc54fe674f40a944372d311c6eb6a2551cf5e18
+updated: 2018-01-02T18:30:09.479184947+01:00
 imports:
+- name: github.com/fatih/camelcase
+  version: 44e46d280b43ec1531bb25252440e34f1b800b65
 - name: github.com/stretchr/testify
-  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
-testImports: []
+  version: b91bfb9ebec76498946beb6af7c0230c7cc7ba6c
+  subpackages:
+  - assert
+  - require
+testImports:
+- name: github.com/davecgh/go-spew
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
