@@ -1,4 +1,4 @@
-package query
+package whois
 
 //
 // parseArinFormat parses whois output format of Arin.

@@ -68,7 +68,7 @@ $(GOPATH)/bin/gas:
 	$(GO) get github.com/GoASTScanner/gas
 
 tldlist.go:
-	@echo "package query" > $@
+	@echo "package whois" > $@
 	@echo "var tldlist map[string]bool" >> $@
 	@echo "func init() {" >> $@
 	@echo "tldlist = make(map[string]bool)" >> $@

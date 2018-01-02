@@ -1,6 +1,6 @@
 // !building +testing
 
-package query
+package whois
 
 import (
 	"net"

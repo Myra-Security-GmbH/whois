@@ -1,4 +1,4 @@
-package query
+package whois
 
 //
 // parseRipeFormat parses whois output format of ripe.

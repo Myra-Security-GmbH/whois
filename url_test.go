@@ -1,6 +1,6 @@
 // !build +testing
 
-package query
+package whois
 
 import "testing"
 
