@@ -5,7 +5,7 @@ import (
 )
 
 //
-// Domain performs a whois query for the given domain.
+// Domain performs a whois query for the given domain or hostname.
 //
 func Domain(domainOrHost string) ([]map[string]string, error) {
 	domain, tld := domainTld(domainOrHost)

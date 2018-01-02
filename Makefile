@@ -4,7 +4,7 @@ TLD_URL = https://publicsuffix.org/list/public_suffix_list.dat
 
 all: \
 	vendor \
-	query/tldlist.go
+	tldlist.go
 
 vendor:
 	glide install
@@ -67,7 +67,7 @@ $(GOPATH)/bin/staticcheck:
 $(GOPATH)/bin/gas:
 	$(GO) get github.com/GoASTScanner/gas
 
-query/tldlist.go:
+tldlist.go:
 	@echo "package query" > $@
 	@echo "var tldlist map[string]bool" >> $@
 	@echo "func init() {" >> $@
@@ -79,5 +79,5 @@ query/tldlist.go:
 	@$(GO) fmt $@
 
 
-.PHONY:all test lint vendor query/tldlist.go
+.PHONY:all test lint vendor tldlist.go
 

@@ -1,2 +1,2 @@
 vendor/
-query/tldlist.go
+tldlist.go
