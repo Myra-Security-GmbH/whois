@@ -22,10 +22,16 @@ loop:
 
 		switch {
 		case (tok == '\n'):
-			key := strings.Trim(string(lastToken), " ")
-			value := strings.Trim(string(currentToken), " ")
+			key := strings.Trim(string(lastToken), " \r")
+			value := strings.Trim(string(currentToken), " \r")
+
+			if strings.Index(key, "Registry ") == 0 && len(currentRecord) > 0 && len(value) == 0 {
+				ret = append(ret, currentRecord)
+				currentRecord = make(map[string]string)
+			}
 
 			if key != "" && value != "" {
+
 				if lastKey == key {
 					currentRecord[key] += "\n" + value
 				} else {
@@ -56,7 +62,6 @@ loop:
 
 	if len(currentRecord) > 0 {
 		ret = append(ret, currentRecord)
-		currentRecord = make(map[string]string)
 	}
 
 	return ret

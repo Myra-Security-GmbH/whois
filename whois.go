@@ -1,6 +1,6 @@
 package main
 
-import "github.com/xellio/whois/query"
+import "myracloud.com/whois/query"
 
 func main() {
 	query.QueryIP("194.25.2.129")

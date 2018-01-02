@@ -1,5 +1,10 @@
 GO      = go
 GOLINT  = $(GOPATH)/bin/gometalinter
+TLD_URL = https://publicsuffix.org/list/public_suffix_list.dat
+
+all: \
+	vendor \
+	query/tldlist.go
 
 vendor:
 	glide install
@@ -62,5 +67,17 @@ $(GOPATH)/bin/staticcheck:
 $(GOPATH)/bin/gas:
 	$(GO) get github.com/GoASTScanner/gas
 
-.PHONY:test lint vendor
+query/tldlist.go:
+	@echo "package query" > $@
+	@echo "var tldlist map[string]bool" >> $@
+	@echo "func init() {" >> $@
+	@echo "tldlist = make(map[string]bool)" >> $@
+	@wget -q $(TLD_URL) -O - | grep -vE "^(|//.*)$$" | grep -v "^*" | sort | awk '{\
+		print "tldlist[\""$$1"\"] = true"\
+	}' >> $@
+	@echo "}" >> $@
+	@$(GO) fmt $@
+
+
+.PHONY:all test lint vendor query/tldlist.go
 

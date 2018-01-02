@@ -2,10 +2,18 @@
 
 package query
 
-import "testing"
+import (
+	"fmt"
+	"net/url"
+	"testing"
+)
 
 func TestDomain(t *testing.T) {
-	for _, domain := range []string{"myracloud.com"} {
+
+	url1 := "http://www.github.com"
+	parsed, _ := url.Parse(url1)
+	fmt.Println(parsed)
+	for _, domain := range []string{parsed.Host} {
 		Domain(domain)
 	}
 }
