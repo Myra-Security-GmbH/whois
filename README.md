@@ -3,11 +3,9 @@
 [Documentation](https://godoc.org/github.com/Myra-Security-GmbH/whois)
 
 ### Examples
-Query by Host:
+Query by URL:
 ```
-exampleUrl := "https://github.com/Myra-Security-GmbH/whois"
-parsedUrl, _ := url.Parse(exampleUrl)
-parsedData, err := whois.Domain(domain)
+parsedData, err := whois.Domain("https://github.com/Myra-Security-GmbH/whois")
 if err != nil {
 	fmt.Println(err)
 	return
@@ -16,10 +14,20 @@ fmt.Println(parsedData[0]["city"])
 //Output:
 //San Francisco
 ```
+Query by Host/Domain:
+```
+parsedData, err := whois.Domain("google.net")
+if err != nil {
+	fmt.Println(err)
+	return
+}
+fmt.Println(parsedData[0]["city"])
+//Output:
+//Mountain View
+```
 Query by IP:
 ```
-ip := net.ParseIP("194.25.2.129")
-parsedData, err := whois.IP(ip)
+parsedData, err := whois.IP(net.ParseIP("194.25.2.129"))
 if err != nil {
 	fmt.Println(err)
 	return
