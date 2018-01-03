@@ -7,10 +7,15 @@ import (
 //
 // Domain performs a whois query for the given domain or hostname.
 //
-func Domain(domainOrHost string) ([]map[string]string, error) {
+func Domain(domainOrHost string, cache *KVCache) ([]map[string]string, error) {
 	domain, tld := domainTld(domainOrHost)
 
-	whoisServer := IanaServer
+	whoisServer := cache.Get(domain)
+
+	if whoisServer == "" {
+		whoisServer := IanaServer
+	}
+
 	parsedData, _, err := findWhois(whoisServer, tld, domain)
 
 	return parsedData, err
