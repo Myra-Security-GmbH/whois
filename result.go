@@ -15,7 +15,7 @@ const (
 )
 
 //
-// QueryResult struct
+// QueryResult contains raw and parsed information of a whois query
 //
 type QueryResult struct {
 	records []QueryRecord
@@ -23,7 +23,7 @@ type QueryResult struct {
 }
 
 //
-// QueryRecord struct
+// QueryRecord containing parsed record data and additional meta data
 //
 type QueryRecord struct {
 	data       map[string]string
