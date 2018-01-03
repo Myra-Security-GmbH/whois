@@ -7,14 +7,14 @@ import (
 //
 // Domain performs a whois query for the given domain or hostname.
 //
-func Domain(domainOrHost string, cache *KVCache) ([]map[string]string, error) {
+func Domain(domainOrHost string, cache *KVCache) (QueryResult, error) {
 	domain, tld := domainTld(domainOrHost)
 
-	whoisServer := cache.Get(domain)
+	//whoisServer := cache.Get(domain)
 
-	if whoisServer == "" {
-		whoisServer = IanaServer
-	}
+	//if whoisServer == "" {
+	whoisServer := IanaServer
+	//}
 
 	parsedData, _, err := findWhois(whoisServer, tld, domain)
 
@@ -50,7 +50,7 @@ func domainTld(domain string) (string, string) {
 // -> fetch data from whois tld server
 // -> loop as long a registrant whois server is set in the records
 //
-func findWhois(server string, queryData string, domain string) (parsedData []map[string]string, whoisServer string, err error) {
+func findWhois(server string, queryData string, domain string) (parsedData QueryResult, whoisServer string, err error) {
 	data, err := query(server, queryData)
 	if err != nil {
 		return
@@ -66,9 +66,9 @@ func findWhois(server string, queryData string, domain string) (parsedData []map
 	}
 
 	whoisServer = server
-	for _, d := range parsedData {
+	for _, d := range parsedData.Records() {
 		for _, key := range []string{"whois", "Registrar WHOIS Server"} {
-			whois, ok := d[key]
+			whois, ok := d.data[key]
 
 			if ok && len(whois) > 0 {
 				whoisServer := whois + ":43"

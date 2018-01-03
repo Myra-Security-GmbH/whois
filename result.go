@@ -15,7 +15,7 @@ const (
 )
 
 //
-// QueryRecord ...
+// QueryResult struct
 //
 type QueryResult struct {
 	records []QueryRecord
@@ -23,11 +23,31 @@ type QueryResult struct {
 }
 
 //
-// QueryRecord ...
+// QueryRecord struct
 //
 type QueryRecord struct {
 	data       map[string]string
 	recordType int
+}
+
+//
+// NewQueryResult creates and returns a new QueryResult
+//
+func NewQueryResult(in []byte) QueryResult {
+	return QueryResult{
+		raw:     in,
+		records: []QueryRecord{},
+	}
+}
+
+//
+// NewQueryRecord creates and returns a new QueryRecord
+//
+func NewQueryRecord(data map[string]string, recordType int) QueryRecord {
+	return QueryRecord{
+		data:       data,
+		recordType: recordType,
+	}
 }
 
 //

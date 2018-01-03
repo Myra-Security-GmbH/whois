@@ -3,8 +3,8 @@ package whois
 //
 // parseRipeFormat parses whois output format of ripe.
 //
-func parseRipeFormat(in []byte) []map[string]string {
-	ret := []map[string]string{}
+func parseRipeFormat(in []byte) QueryResult {
+	result := NewQueryResult(in)
 	lastKey := ""
 	lastToken := []byte{}
 	currentToken := []byte{}
@@ -28,7 +28,7 @@ func parseRipeFormat(in []byte) []map[string]string {
 		case (tok == '\n' && (i > 0 && in[i-1] == '\n')):
 			// save old record and create a new one
 			if len(currentRecord) > 0 {
-				ret = append(ret, currentRecord)
+				result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
 				currentRecord = make(map[string]string)
 			}
 			continue
@@ -73,9 +73,8 @@ func parseRipeFormat(in []byte) []map[string]string {
 	}
 
 	if len(currentRecord) > 0 {
-		ret = append(ret, currentRecord)
-		currentRecord = make(map[string]string)
+		result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
 	}
 
-	return ret
+	return result
 }

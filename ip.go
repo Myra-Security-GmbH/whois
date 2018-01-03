@@ -5,7 +5,7 @@ import "net"
 //
 // IP ...
 //
-func IP(ip net.IP) ([]map[string]string, error) {
+func IP(ip net.IP) (result QueryResult, err error) {
 	server := DetermineWhoisServerForIP(ip)
 
 	data, err := query(
@@ -14,7 +14,7 @@ func IP(ip net.IP) ([]map[string]string, error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	switch server {
@@ -34,5 +34,5 @@ func IP(ip net.IP) ([]map[string]string, error) {
 		return parseArinFormat(data), nil
 	}
 
-	return nil, nil
+	return
 }

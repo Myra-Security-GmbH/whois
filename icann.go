@@ -7,8 +7,8 @@ import (
 //
 // parseICANNData parses whois output format of Internic.
 //
-func parseICANNData(in []byte) []map[string]string {
-	ret := []map[string]string{}
+func parseICANNData(in []byte) QueryResult {
+	result := NewQueryResult(in)
 	lastKey := ""
 	lastToken := []byte{}
 	currentToken := []byte{}
@@ -26,7 +26,7 @@ loop:
 			value := normalizeValue(string(currentToken))
 
 			if strings.Index(key, "Registry ") == 0 && len(currentRecord) > 0 && len(value) == 0 {
-				ret = append(ret, currentRecord)
+				result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
 				currentRecord = make(map[string]string)
 			}
 
@@ -61,8 +61,8 @@ loop:
 	}
 
 	if len(currentRecord) > 0 {
-		ret = append(ret, currentRecord)
+		result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
 	}
 
-	return ret
+	return result
 }

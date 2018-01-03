@@ -1,6 +1,8 @@
 package whois
 
-import "net"
+import (
+	"net"
+)
 
 const (
 	// RipeServer used for ip/net queries

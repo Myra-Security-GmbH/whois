@@ -5,12 +5,12 @@
 ### Examples
 Query by URL:
 ```
-parsedData, err := whois.Domain("https://github.com/Myra-Security-GmbH/whois")
+parsedData, err := whois.URL("https://github.com/Myra-Security-GmbH/whois")
 if err != nil {
 	fmt.Println(err)
 	return
 }
-fmt.Println(parsedData[0]["city"])
+fmt.Println(parsedData.Records()[0].data["city"])
 //Output:
 //San Francisco
 ```
@@ -21,7 +21,7 @@ if err != nil {
 	fmt.Println(err)
 	return
 }
-fmt.Println(parsedData[0]["city"])
+fmt.Println(parsedData.Records()[0].data["city"])
 //Output:
 //Mountain View
 ```
@@ -32,7 +32,7 @@ if err != nil {
 	fmt.Println(err)
 	return
 }
-fmt.Println(parsedData[1]["org-name"])
+fmt.Println(parsedData.Records()[1].data["org-name"])
 // Output:
 // Deutsche Telekom AG
 ```

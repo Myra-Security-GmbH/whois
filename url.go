@@ -3,14 +3,14 @@ package whois
 import pkgUrl "net/url"
 
 //
-// Url returns a whois from the domain name of an url.
+// URL returns a whois from the domain name of an url.
 //
-func Url(url string) ([]map[string]string, error) {
+func URL(url string, cache *KVCache) (result QueryResult, err error) {
 	u, err := pkgUrl.Parse(url)
 
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	return Domain(u.Host, nil)
+	return Domain(u.Host, cache)
 }
