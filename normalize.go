@@ -11,7 +11,6 @@ import (
 //
 func normalizeKey(key string) string {
 	ret := strings.Trim(key, " -\r")
-
 next:
 	switch {
 	case (strings.Index(ret, "Tech ") == 0):
@@ -65,10 +64,9 @@ next:
 
 	case (strings.Index(ret, "-") > 0):
 		return strings.ToLower(ret)
-
 	}
 
-	ret = strings.Replace(ret, " ", "-", -1)
+	ret = strings.Replace(ret, " ", "", -1)
 	ret = strings.Replace(ret, "/", "-", -1)
 
 	split := camelcase.Split(ret)
