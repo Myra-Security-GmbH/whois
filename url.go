@@ -12,5 +12,5 @@ func Url(url string) ([]map[string]string, error) {
 		return nil, err
 	}
 
-	return Domain(u.Host)
+	return Domain(u.Host, nil)
 }
