@@ -13,7 +13,7 @@ func Domain(domainOrHost string, cache *KVCache) ([]map[string]string, error) {
 	whoisServer := cache.Get(domain)
 
 	if whoisServer == "" {
-		whoisServer := IanaServer
+		whoisServer = IanaServer
 	}
 
 	parsedData, _, err := findWhois(whoisServer, tld, domain)
