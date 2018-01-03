@@ -63,3 +63,10 @@ func (q QueryResult) RawOutput() []byte {
 func (q QueryResult) Records() []QueryRecord {
 	return q.records
 }
+
+//
+// Data returns the parsed data map
+//
+func (r QueryRecord) Data() map[string]string {
+	return r.data
+}
