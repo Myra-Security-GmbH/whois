@@ -1,39 +1,38 @@
-# whois - a go wrapper for whois command
+# whois - a whois implementation/parser, written in go
+
+[Documentation](https://godoc.org/github.com/Myra-Security-GmbH/whois)
 
 ### Examples
 Query by URL:
 ```
-url := "http://github.com/xellio/whois"
-res, err := whois.Query(url)
+parsedData, err := whois.Domain("https://github.com/Myra-Security-GmbH/whois")
 if err != nil {
 	fmt.Println(err)
 	return
 }
-fmt.Println(strings.Join(res.Output["Registrant City"], ","))
+fmt.Println(parsedData[0]["city"])
 //Output:
 //San Francisco
 ```
-Query by hostname:
+Query by Host/Domain:
 ```
-host := "golang.org"
-res, err := whois.QueryHost(host)
+parsedData, err := whois.Domain("google.net")
 if err != nil {
 	fmt.Println(err)
 	return
 }
-fmt.Println(strings.Join(res.Output["Registrant Country"], ","))
-// Output:
-// US
+fmt.Println(parsedData[0]["city"])
+//Output:
+//Mountain View
 ```
 Query by IP:
 ```
-ip := net.ParseIP("8.8.8.8")
-res, err := whois.QueryIp(ip)
+parsedData, err := whois.IP(net.ParseIP("194.25.2.129"))
 if err != nil {
 	fmt.Println(err)
 	return
 }
-fmt.Println(strings.Join(res.Output["CIDR"], ","))
+fmt.Println(parsedData[1]["org-name"])
 // Output:
-// 8.0.0.0/8,8.8.8.0/24
+// Deutsche Telekom AG
 ```
