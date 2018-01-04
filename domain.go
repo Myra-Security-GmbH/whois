@@ -7,18 +7,25 @@ import (
 //
 // Domain performs a whois query for the given domain or hostname.
 //
-func Domain(domainOrHost string, cache *KVCache) (QueryResult, error) {
+func Domain(domainOrHost string, cache *KVCache) (result QueryResult, err error) {
 	domain, tld := domainTld(domainOrHost)
 
-	//whoisServer := cache.Get(domain)
+	if cache != nil {
+		var found bool
+		result, found = cache.Get(domain)
+		if found {
+			return
+		}
+	}
 
-	//if whoisServer == "" {
 	whoisServer := IanaServer
-	//}
+	result, _, err = findWhois(whoisServer, tld, domain)
 
-	parsedData, _, err := findWhois(whoisServer, tld, domain)
+	if cache != nil {
+		cache.Add(domain, result)
+	}
 
-	return parsedData, err
+	return
 }
 
 //
@@ -64,6 +71,7 @@ func findWhois(server string, queryData string, domain string) (parsedData Query
 	default:
 		parsedData = parseICANNData(data)
 	}
+	parsedData.target = domain
 
 	whoisServer = server
 	for _, d := range parsedData.Records() {

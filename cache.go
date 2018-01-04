@@ -10,7 +10,7 @@ import (
 // kvCacheItem
 //
 type kvCacheItem struct {
-	value      string
+	value      QueryResult
 	lastUpdate time.Time
 	lastAccess time.Time
 }
@@ -28,7 +28,7 @@ type KVCache struct {
 // If the entry already exist the value and lastUpdate will be updated.
 // Returns true if the key did not exist before otherwise false.
 //
-func (c *KVCache) Add(key string, value string) bool {
+func (c *KVCache) Add(key string, value QueryResult) bool {
 	val, ok := c.data[key]
 
 	if ok {
@@ -49,24 +49,22 @@ func (c *KVCache) Add(key string, value string) bool {
 }
 
 //
-// Get returns the value for the given or empty string if
-// the key does not exist.
-// If the key's lastUpdate is older than the ttl allows empty string is returned
+// Get returns the value for the given key
+// If the key's lastUpdate is older than the ttl allows default/empty is returned
 //
-func (c *KVCache) Get(key string) string {
+func (c *KVCache) Get(key string) (result QueryResult, found bool) {
 	val, ok := c.data[key]
-
 	if !ok {
-		return ""
+		return
 	}
 
 	now := time.Now().Add(time.Duration(-1*c.ttl) * time.Second)
 
 	if now.After(val.lastUpdate) {
-		return ""
+		return
 	}
 
-	return val.value
+	return val.value, true
 }
 
 //
@@ -87,7 +85,8 @@ func (c *KVCache) Clean(ttl time.Duration) {
 //
 func NewCache(ttl int) *KVCache {
 	return &KVCache{
-		ttl: ttl,
+		ttl:  ttl,
+		data: make(map[string]*kvCacheItem),
 	}
 }
 

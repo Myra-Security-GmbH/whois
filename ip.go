@@ -1,37 +1,52 @@
 package whois
 
-import "net"
+import (
+	"net"
+)
 
 //
-// IP ...
+// IP performs a whois query for the given net.IP.
 //
-func IP(ip net.IP) (result QueryResult, err error) {
+func IP(ip net.IP, cache *KVCache) (result QueryResult, err error) {
+
+	if cache != nil {
+		var found bool
+		result, found = cache.Get(ip.String())
+		if found {
+			return
+		}
+	}
+
 	server := DetermineWhoisServerForIP(ip)
 
 	data, err := query(
 		server,
 		ip.String(),
 	)
-
 	if err != nil {
 		return
 	}
 
 	switch server {
 	case RipeServer:
-		return parseRipeFormat(data), nil
+		result = parseRipeFormat(data)
 
 	case ApnicServer:
-		return parseRipeFormat(data), nil
+		result = parseRipeFormat(data)
 
 	case AfrinicServer:
-		return parseRipeFormat(data), nil
+		result = parseRipeFormat(data)
 
 	case LacnicServer:
-		return parseRipeFormat(data), nil
+		result = parseRipeFormat(data)
 
 	case ArinServer:
-		return parseArinFormat(data), nil
+		result = parseArinFormat(data)
+	}
+	result.target = ip.String()
+
+	if cache != nil {
+		cache.Add(ip.String(), result)
 	}
 
 	return

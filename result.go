@@ -18,6 +18,7 @@ const (
 // QueryResult contains raw and parsed information of a whois query
 //
 type QueryResult struct {
+	target  string
 	records []QueryRecord
 	raw     []byte
 }
@@ -62,6 +63,13 @@ func (q QueryResult) RawOutput() []byte {
 //
 func (q QueryResult) Records() []QueryRecord {
 	return q.records
+}
+
+//
+// Target returns the queried target (hostname or IP)
+//
+func (q QueryResult) Target() string {
+	return q.target
 }
 
 //

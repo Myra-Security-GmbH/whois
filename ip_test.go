@@ -11,7 +11,7 @@ import (
 
 func TestIP1(t *testing.T) {
 
-	data, err := IP(net.ParseIP("194.25.2.129"))
+	data, err := IP(net.ParseIP("194.25.2.129"), nil)
 
 	require.Nil(t, err)
 	require.NotEmpty(t, data)
@@ -79,7 +79,7 @@ func TestIP1(t *testing.T) {
 }
 
 func TestIP2(t *testing.T) {
-	data, err := IP(net.ParseIP("212.18.0.5"))
+	data, err := IP(net.ParseIP("212.18.0.5"), nil)
 
 	require.Nil(t, err)
 	require.NotEmpty(t, data)
@@ -132,7 +132,7 @@ func TestIP2(t *testing.T) {
 }
 
 func TestIP3(t *testing.T) {
-	data, err := IP(net.ParseIP("23.8.8.8"))
+	data, err := IP(net.ParseIP("23.8.8.8"), nil)
 
 	require.Nil(t, err)
 	require.NotEmpty(t, data)
