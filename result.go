@@ -10,6 +10,12 @@ const (
 	// RecordTypeOwner record type for owner
 	RecordTypeOwner = 3
 
+	// RecordTypeNetwork record type for a network
+	RecordTypeNetwork = 4
+
+	// RecordTypeDomain record type for a domain
+	RecordTypeDomain = 5
+
 	// RecordTypeOther for all other records
 	RecordTypeOther = 256
 )

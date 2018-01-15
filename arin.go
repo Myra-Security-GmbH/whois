@@ -1,5 +1,7 @@
 package whois
 
+import "strings"
+
 //
 // parseArinFormat parses whois output format of Arin.
 //
@@ -10,8 +12,8 @@ func parseArinFormat(in []byte) QueryResult {
 	lastToken := []byte{}
 	currentToken := []byte{}
 	valueMode := false
-
 	currentRecord := make(map[string]string)
+	zoneType := RecordTypeNetwork
 
 	for i := 0; i < len(in); i++ {
 		tok := in[i]
@@ -29,9 +31,11 @@ func parseArinFormat(in []byte) QueryResult {
 		case (tok == '\n' && (i > 0 && in[i-1] == '\n')):
 			// save old record and create a new one
 			if len(currentRecord) > 0 {
-				result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
+				result.records = append(result.Records(), NewQueryRecord(currentRecord, zoneType))
 				currentRecord = make(map[string]string)
 			}
+
+			zoneType = RecordTypeOther
 			continue
 
 		case (tok == '\n' && len(in) > i+1 && in[i+1] == ' '):
@@ -44,6 +48,20 @@ func parseArinFormat(in []byte) QueryResult {
 			continue
 
 		case (tok == '\n' && len(in) > i+1 && in[i+1] != ' '):
+			tmp := string(lastToken)
+			if tmp != "" {
+				switch {
+				case (tmp == "OrgName" || tmp == "OrgId"):
+					zoneType = RecordTypeOwner
+
+				case (strings.Index(tmp, "OrgAbuse") == 0):
+					zoneType = RecordTypeOther
+
+				case (strings.Index(tmp, "OrgTech") == 0):
+					zoneType = RecordTypeTechC
+				}
+			}
+
 			key := normalizeKey(string(lastToken))
 			value := normalizeValue(string(currentToken))
 

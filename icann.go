@@ -26,7 +26,23 @@ loop:
 			value := normalizeValue(string(currentToken))
 
 			if strings.Index(key, "Registry ") == 0 && len(currentRecord) > 0 && len(value) == 0 {
-				result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
+				zoneType := RecordTypeOther
+
+				switch key[9:] {
+				case "Domain ID":
+					zoneType = RecordTypeDomain
+
+				case "Registrant ID":
+					zoneType = RecordTypeOwner
+
+				case "Admin ID":
+					zoneType = RecordTypeAdminC
+
+				case "Tech ID":
+					zoneType = RecordTypeTechC
+				}
+
+				result.records = append(result.Records(), NewQueryRecord(currentRecord, zoneType))
 				currentRecord = make(map[string]string)
 			}
 

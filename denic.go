@@ -1,5 +1,7 @@
 package whois
 
+import "strings"
+
 //
 // parseArinFormat parses whois output format of Arin.
 //
@@ -27,8 +29,26 @@ func parseDenicFormat(in []byte) QueryResult {
 
 		case (tok == '['):
 			// save old record and create a new one
+			start := i
+			end := i
+			for ; tok != ']'; i++ {
+				end = i
+
+				tok = in[i]
+			}
+
+			zoneType := RecordTypeOther
+
+			switch strings.ToLower(string(in[start:end])) {
+			case "tech-c":
+				zoneType = RecordTypeTechC
+
+			case "zone-c":
+				zoneType = RecordTypeOwner
+			}
+
 			if len(currentRecord) > 0 {
-				result.records = append(result.Records(), NewQueryRecord(currentRecord, 0))
+				result.records = append(result.Records(), NewQueryRecord(currentRecord, zoneType))
 				currentRecord = make(map[string]string)
 			}
 			continue
