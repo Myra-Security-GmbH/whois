@@ -84,3 +84,10 @@ func (q QueryResult) Target() string {
 func (r QueryRecord) Data() map[string]string {
 	return r.data
 }
+
+//
+// RecordType returns the record type
+//
+func (r QueryRecord) RecordType() int {
+	return r.recordType
+}
