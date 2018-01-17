@@ -22,6 +22,9 @@ const (
 
 	// IanaServer ...
 	IanaServer = "whois.iana.org:43"
+
+	// DenicServer ...
+	DenicServer = "whois.denic.de:43"
 )
 
 // networkAssignment ...

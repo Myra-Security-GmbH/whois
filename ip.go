@@ -27,22 +27,23 @@ func IP(ip net.IP, cache *KVCache) (result QueryResult, err error) {
 		return
 	}
 
+	var format string
 	switch server {
 	case RipeServer:
-		result = parseRipeFormat(data)
-
+		format = FormatRipe
 	case ApnicServer:
-		result = parseRipeFormat(data)
-
+		format = FormatApnic
 	case AfrinicServer:
-		result = parseRipeFormat(data)
-
+		format = FormatAfrinic
 	case LacnicServer:
-		result = parseRipeFormat(data)
-
+		format = FormatLacnic
 	case ArinServer:
-		result = parseArinFormat(data)
+		format = FormatArin
+	default:
+		format = FormatRipe
 	}
+
+	result = Parse(data, format)
 	result.target = ip.String()
 
 	if cache != nil {

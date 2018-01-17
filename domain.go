@@ -63,14 +63,17 @@ func findWhois(server string, queryData string, domain string) (parsedData Query
 		return
 	}
 
+	var format string
 	switch server {
-	case "whois.denic.de:43":
-		parsedData = parseDenicFormat(data)
+	case DenicServer:
+		format = FormatDenic
 	case IanaServer:
-		parsedData = parseRipeFormat(data)
+		format = FormatIana
 	default:
-		parsedData = parseICANNData(data)
+		format = FormatIcaan
 	}
+
+	parsedData = Parse(data, format)
 	parsedData.target = domain
 
 	whoisServer = server
