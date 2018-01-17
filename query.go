@@ -1,6 +1,7 @@
 package whois
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net"
@@ -75,6 +76,11 @@ func query(server string, data string) ([]byte, error) {
 // Parse the given raw data using a format specific parse function
 //
 func Parse(raw []byte, format string) (parsed QueryResult) {
+
+	if len(format) == 0 {
+		format = findFormatInRaw(raw)
+	}
+
 	switch format {
 	case FormatDenic:
 		parsed = parseDenicFormat(raw)
@@ -97,4 +103,44 @@ func Parse(raw []byte, format string) (parsed QueryResult) {
 	}
 
 	return
+}
+
+//
+// findFormatInRaw tries to find the format in the given raw []byte
+//
+func findFormatInRaw(raw []byte) string {
+
+	if bytes.Index(raw, []byte("//www.ripe.net")) != -1 {
+		return FormatRipe
+	}
+
+	if bytes.Index(raw, []byte("//www.icann.org")) != -1 {
+		return FormatIcaan
+	}
+
+	if bytes.Index(raw, []byte("//www.iana.org")) != -1 {
+		return FormatIana
+	}
+
+	if bytes.Index(raw, []byte("//www.denic.de")) != -1 {
+		return FormatDenic
+	}
+
+	if bytes.Index(raw, []byte("//www.arin.net")) != -1 {
+		return FormatArin
+	}
+
+	if bytes.Index(raw, []byte("//www.afrinic.net")) != -1 {
+		return FormatAfrinic
+	}
+
+	if bytes.Index(raw, []byte("//www.apnic.net")) != -1 {
+		return FormatApnic
+	}
+
+	if bytes.Index(raw, []byte("//www.lacnic.net")) != -1 {
+		return FormatLacnic
+	}
+
+	return "unknown"
 }
